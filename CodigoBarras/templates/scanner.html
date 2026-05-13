@@ -1,0 +1,17 @@
+<html>
+<body>
+
+    <head>Introduce el código del articulo</head>
+
+    <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="barCode">
+            <input type="submit" name="add" value="Añadir">
+            <input type="submit" name="substract" value="Quitar">
+    </form>
+
+    <p>
+        {{response}}
+    </p>
+</body>
+</html>
