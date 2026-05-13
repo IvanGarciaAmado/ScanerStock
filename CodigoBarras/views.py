@@ -13,7 +13,7 @@ def scannerView(request):
         item=browseReferenceTable(barCodeValue)
         response=""
         if item == False:
-            createNewItem(request)
+            return render(request, "newItem.html")
         else:
             if request.POST.get("name") == "add":
                 modifyQuantity(item,1)
@@ -26,6 +26,3 @@ def scannerView(request):
         context={response:"response"}
         return render(request, "scanner.html",context)    
     
-def createNewItem(request):
-
-    return render(request, "newItem.html")
