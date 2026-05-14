@@ -1,5 +1,5 @@
 from django.template import loader
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from Model.models import *
 
 
@@ -13,7 +13,7 @@ def scannerView(request):
         item=browseReferenceTable(barCodeValue)
         response=""
         if item == False:
-            return render(request, "newItem.html")
+            return redirect("new_item")
         else:
             if request.POST.get("name") == "add":
                 modifyQuantity(item,1)
@@ -25,4 +25,11 @@ def scannerView(request):
 
         context={response:"response"}
         return render(request, "scanner.html",context)    
-    
+
+def new_item(request):
+    bar_code=request.POST.get("barCode")
+    name=request.POST.get("name")
+    friendly_id=request.POST.get("friendyId")
+
+    return render(request, "newItem.html")
+
