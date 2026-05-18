@@ -29,9 +29,9 @@ def modifyQuantity(item,quantity):
     product=Product(item.name, item.quantity)
     return product.str()
 
-def add_new_item(bar_code, name):
-    ReferenceTable.objects.create(barCode=bar_code)
-    reference_table_item=ReferenceTable.objects.get(barCode=bar_code)
+def add_new_item(bar_code_value, name):
+    ReferenceTable.objects.create(barCode=bar_code_value,friendyId=0)
+    reference_table_item=ReferenceTable.objects.get(barCode=bar_code_value)
     
     stock_item=Stock.objects.get(name=name)
 
@@ -42,9 +42,8 @@ def add_new_item(bar_code, name):
         new_stock_item=Stock.objects.create(name=name, quantity=1)
         ReferenceTable.objects.update(friendlyId=new_stock_item.id)
     
-    print("Stock item: ",Stock,object.get(id=stock_item.id))
-    print("Reference item: ",ReferenceTable.object.get(friendlyId=stock_item.id))
-
+    response="Stock item: ",Stock,object.get(id=stock_item.id),"Reference item: ",ReferenceTable.object.get(friendlyId=stock_item.id)
+    return response
     
 
 

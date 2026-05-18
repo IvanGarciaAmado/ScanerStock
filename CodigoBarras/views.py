@@ -1,35 +1,28 @@
 from django.template import loader
-from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect
 from Model.models import *
 
 
-def scannerView(request):
-
+def scanner_view(request):
     if request.method == "GET":
-        return render(request, "scanner.html")
+        return render(request,"scanner.html")
     
     elif request.method == "POST":
-        barCodeValue=request.POST.get("barCode")
-        item=browseReferenceTable(barCodeValue)
-        response=""
-        if item == False:
-            return redirect("new_item")
+        bar_code=request.POST.get("bar_code")
+        if bar_code:
+            return redirect(new_item_view)
         else:
-            if request.POST.get("name") == "add":
-                modifyQuantity(item,1)
-                response="Se ha añadido un item"
-                
-            elif request.POST.get("name") == "substract":
-                modifyQuantity(item,-1)
-                response="Se ha quitado un item"
+            context={"response":"Introduce un código de barras"}
+            return render(request,"scanner.html",context)
+    
+def new_item_view(request):
+    context={}
+    if request.method == "POST":
+        bar_code=request.POST.get("bar_code")
+        name=request.POST.get("name")
 
-        context={response:"response"}
-        return render(request, "scanner.html",context)    
-
-def new_item(request):
-    bar_code=request.POST.get("barCode")
-    name=request.POST.get("name")
-    friendly_id=request.POST.get("friendyId")
-
-    return render(request, "newItem.html")
+        response=add_new_item(bar_code, name)
+        context={"response":response}
+    
+    return render(request,"new_item.html",context)
 

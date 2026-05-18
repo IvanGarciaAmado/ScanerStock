@@ -3,15 +3,11 @@
 
     <head>Introduce el código del articulo</head>
 
-    <form method="POST">
+    <form action="/scanner/" method="POST">
             {% csrf_token %}
-            <input type="text" name="barCode">
-            <input type="submit" name="add" value="Añadir">
-            <input type="submit" name="substract" value="Quitar">
+            <input type="text" name="bar_code">
+            <input type="submit" name="Button" value="Enviar">
     </form>
-
-    <p>
-        {{response}}
-    </p>
+    {{response}}
 </body>
 </html>

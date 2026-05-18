@@ -16,10 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from CodigoBarras.views import scannerView,new_item
+from CodigoBarras.views import scanner_view, new_item_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("scanner/",scannerView),
-    path("newitem/",new_item, name="new_item")
+    path("scanner/",scanner_view),
+    path("new_item/",new_item_view,name="new_item_view")
 ]
