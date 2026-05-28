@@ -10,10 +10,14 @@ def scanner_view(request):
     elif request.method == "POST":
         bar_code=request.POST.get("bar_code")
         if bar_code:
-            return redirect(new_item_view)
+            found_stock_item=get_item_by_barcode(bar_code)
+            if found_stock_item:
+                context={"response":"Objeto encontrado"}
+            else:
+                return redirect(new_item_view)
         else:
             context={"response":"Introduce un código de barras"}
-            return render(request,"scanner.html",context)
+        return render(request,"scanner.html",context)
     
 def new_item_view(request):
     context={}

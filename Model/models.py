@@ -8,19 +8,19 @@ class Stock(models.Model):
 
 class ReferenceTable(models.Model):
     barCode=models.IntegerField()
-    friendyId=models.IntegerField()
+    friendlyId=models.IntegerField()
 
 
 def browseReferenceTable(barCode:int):
     try:
         RTItem=ReferenceTable.objects.get(barCode=barCode)
-        browseStock(RTItem.friendyId)
+        browseStock(RTItem.friendlyId)
         
     except:
         return False
 
-def browseStock(friendyIdParameter:int):
-    StockItem=Stock.objects.get(friendyId=friendyIdParameter)
+def browseStock(friendlyIdParameter:int):
+    StockItem=Stock.objects.get(friendlyId=friendlyIdParameter)
     return StockItem
 
 def modifyQuantity(item,quantity):
@@ -29,20 +29,34 @@ def modifyQuantity(item,quantity):
     product=Product(item.name, item.quantity)
     return product.str()
 
-def add_new_item(bar_code_value, name):
-    ReferenceTable.objects.create(barCode=bar_code_value,friendyId=0)
-    reference_table_item=ReferenceTable.objects.get(barCode=bar_code_value)
-    
-    stock_item=Stock.objects.get(name=name)
+def get_item_by_barcode(bar_code:int):
+    try:
+        reference_table_item=ReferenceTable.objects.get(barCode=bar_code)
+        stock_item=Stock.objects.get(id=reference_table_item.friendlyId)
+        return stock_item
+    except:
+        return None
 
-    if stock_item:
+
+#hayq ue crear unos cuentos objetos en las bbdd y crear el flujo de creacion de objetos desde el principio para probarlo bien
+def add_new_item(bar_code_value, name_value):
+    reference_table_item=ReferenceTable.objects.create(barCode=bar_code_value, friendlyId=0)
+    try:
+        stock_item=Stock.objects.get(name=name_value)
+    except Stock.DoesNotExist:
+        stock_item=None
+
+    if stock_item is not None:
         friendly_id=stock_item.id
-        ReferenceTable.objects.update(friendlyId=friendly_id)
+        reference_table_item.friendlyId=friendly_id
+        reference_table_item.save()
+        response="Stock item: ",Stock.objects.get(id=stock_item.id)
     else:
-        new_stock_item=Stock.objects.create(name=name, quantity=1)
-        ReferenceTable.objects.update(friendlyId=new_stock_item.id)
+        new_stock_item=Stock.objects.create(name=name_value, quantity=1)
+        reference_table_item.friendlyId = new_stock_item.id
+        reference_table_item.save()
+        response="Se crea el objeto",new_stock_item
     
-    response="Stock item: ",Stock,object.get(id=stock_item.id),"Reference item: ",ReferenceTable.object.get(friendlyId=stock_item.id)
     return response
     
 
