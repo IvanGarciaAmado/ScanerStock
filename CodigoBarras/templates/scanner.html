@@ -1,13 +1,20 @@
 <html>
 <body>
 
-    <head>Introduce el código del articulo</head>
+    <h1>Introduce el código del articulo</h1>
 
     <form action="/scanner/" method="POST">
             {% csrf_token %}
             <input type="text" name="bar_code">
             <input type="submit" name="Button" value="Enviar">
     </form>
-    {{response}}
+
+    <h3>
+        {{response}}
+    </h3>
+    <p>
+        {{template_modif_quantity}}
+    </p>
+    
 </body>
 </html>

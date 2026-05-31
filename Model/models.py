@@ -23,11 +23,10 @@ def browseStock(friendlyIdParameter:int):
     StockItem=Stock.objects.get(friendlyId=friendlyIdParameter)
     return StockItem
 
-def modifyQuantity(item,quantity):
+def modifyQuantity(item:int,quantity:int):
     item.quantity += quantity
     item.save()
-    product=Product(item.name, item.quantity)
-    return product.str()
+    print(item.quantity)
 
 def get_item_by_barcode(bar_code:int):
     try:
@@ -35,27 +34,31 @@ def get_item_by_barcode(bar_code:int):
         stock_item=Stock.objects.get(id=reference_table_item.friendlyId)
         return stock_item
     except:
+        print("Item not found")
         return None
 
 
-#hayq ue crear unos cuentos objetos en las bbdd y crear el flujo de creacion de objetos desde el principio para probarlo bien
 def add_new_item(bar_code_value, name_value):
     reference_table_item=ReferenceTable.objects.create(barCode=bar_code_value, friendlyId=0)
     try:
+        #se busca si existe el nuevo objeto en Stock
         stock_item=Stock.objects.get(name=name_value)
     except Stock.DoesNotExist:
         stock_item=None
 
     if stock_item is not None:
+        #Si no existe se crea y se le da un fiendlyId de 0
         friendly_id=stock_item.id
         reference_table_item.friendlyId=friendly_id
         reference_table_item.save()
-        response="Stock item: ",Stock.objects.get(id=stock_item.id)
+        response=f"Se añade un nuevo código de barras para {stock_item.name}"
     else:
+        #Si en stock existe un objeto con el mismo nombre se asocian, no se crea de nuevo
         new_stock_item=Stock.objects.create(name=name_value, quantity=1)
         reference_table_item.friendlyId = new_stock_item.id
         reference_table_item.save()
-        response="Se crea el objeto",new_stock_item
+
+        response="Nuevo objeto en stock"
     
     return response
     

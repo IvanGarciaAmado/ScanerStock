@@ -1,0 +1,16 @@
+<html>
+    
+    <form method="POST">
+        {% csrf_token %}
+        <p>Codigo de barras</p>
+        <input type="text" name="bar_code">
+        <p>Cantidad</p>
+        <input type="text" name="quantity">
+
+        <input type="submit" name="action" value="Sumar">
+
+        <input type="submit" name="action" value="Restar">
+    </form>
+    
+
+</html>
