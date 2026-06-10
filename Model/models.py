@@ -23,17 +23,25 @@ def search_stock(friendly_id_parameter:int):
     return stock_item
 
 def modify_quantity(item:int,quantity:int):
-    item.quantity += quantity
-    item.save()
-    print(item.quantity)
+    print(item)
+    if item is not None:
+        if item.quantity+quantity >= 0:
+            item.quantity += quantity
+        else:
+            item.quantity=0
+        item.save()
+        return item.quantity
+    else:
+        print("quantity was not change")
+        return None
 
-def get_item_by_bar_code(bar_code:int):
+def get_item_by_bar_code(bar_code_value:int):
     try:
-        reference_table_item=reference_table.objects.get(bar_code=bar_code)
+        reference_table_item=reference_table.objects.get(bar_code=bar_code_value)
         stock_item=Stock.objects.get(id=reference_table_item.friendlyId)
         return stock_item
     except:
-        print("Item not found")
+        print("Item not found by code")
         return None
 
 

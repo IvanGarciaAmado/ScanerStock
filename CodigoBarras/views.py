@@ -42,10 +42,14 @@ def template_modif_quantity(request):
 
     if request.POST.get("action") == "Sumar":
         print("se añade",quantity)
-        modify_quantity(item,int(quantity))
+        new_quantity=modify_quantity(item,int(quantity))
     elif request.POST.get("action") == "Restar":
         print("se quita",quantity)
-        modify_quantity(item,-int(quantity))
+        new_quantity=modify_quantity(item,-int(quantity))
+    try:
+        context={"response":f"Nueva cantidad: {new_quantity}"}
+    except UnboundLocalError:
+        pass
     return render(request,"template_modif_quantity.html",context)
 
 def home(request):
