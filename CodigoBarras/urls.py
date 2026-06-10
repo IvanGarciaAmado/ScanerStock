@@ -20,8 +20,8 @@ from CodigoBarras.views import scanner_view, new_item_view,template_modif_quanti
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("scanner/",scanner_view),
+    path("scanner/",scanner_view,name="scanner"),
     path("",home),
-    path("new_item/",new_item_view,name="new_item_view"),
-    path("modif_quantity/",template_modif_quantity,name="template_modif_quantity")
+    path("new_item/",new_item_view,name="new_item"),
+    path("modif_quantity/",template_modif_quantity,name="modif_quantity")
 ]

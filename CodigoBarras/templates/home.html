@@ -1,13 +1,10 @@
 <html>
     <h1>Opciones</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <input type="submit" name="action" value="Scanner">
-        <input type="submit" name="action" value="Añadir nuevo objeto">
-        <input type="submit" name="action" value="Sumar/Restar">
-
-
-
-
-    </form>
+    <nav style="display:flex; gap:10px;">
+        <a href="{% url 'scanner' %}">Scanner</a>
+        <a href="{% url 'new_item' %}">Añadir nuevo objeto</a>
+        <a href="{% url 'modif_quantity' %}">Sumar/Restar</a>
+    </nav>  
+    {% block content %}
+    {% endblock %}
 </html>

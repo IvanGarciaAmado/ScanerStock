@@ -1,16 +1,19 @@
-<html>
-    <body>
-        <h1>
-            Objeto nuevo
-        </h1>
-        <form action="/new_item/" method="POST">
-            {% csrf_token %}
-            <p>Codigo de barras</p>
-            <input type="text" name="bar_code">
-            <p>Nombre</p>
-            <input type="text" name="name">
-            <input type="submit" name="Button" value="Enviar">
-        </form>
-        <h2>{{response}}</h2>
-    </body>
-</html>
+{% extends "home.html" %}
+
+{% block content %}
+<h1>Objeto nuevo</h1>
+
+<form action="/new_item/" method="POST">
+    {% csrf_token %}
+
+    <p>Código de barras</p>
+    <input type="text" name="bar_code">
+
+    <p>Nombre</p>
+    <input type="text" name="name">
+
+    <input type="submit" name="Button" value="Enviar">
+</form>
+
+<h2>{{ response }}</h2>
+{% endblock %}

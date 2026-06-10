@@ -1,36 +1,35 @@
 from django.db import models
-from Model import Product
 
 # Create your models here.
 class Stock(models.Model):
     name=models.CharField(max_length=30)
     quantity=models.IntegerField()
 
-class ReferenceTable(models.Model):
-    barCode=models.IntegerField()
+class reference_table(models.Model):
+    bar_code=models.IntegerField()
     friendlyId=models.IntegerField()
 
 
-def browseReferenceTable(barCode:int):
+def search_reference_table(bar_code:int):
     try:
-        RTItem=ReferenceTable.objects.get(barCode=barCode)
-        browseStock(RTItem.friendlyId)
+        referece_table_item=reference_table.objects.get(bar_code=bar_code)
+        search_stock(referece_table_item.friendlyId)
         
     except:
         return False
 
-def browseStock(friendlyIdParameter:int):
-    StockItem=Stock.objects.get(friendlyId=friendlyIdParameter)
-    return StockItem
+def search_stock(friendly_id_parameter:int):
+    stock_item=Stock.objects.get(friendlyId=friendly_id_parameter)
+    return stock_item
 
-def modifyQuantity(item:int,quantity:int):
+def modify_quantity(item:int,quantity:int):
     item.quantity += quantity
     item.save()
     print(item.quantity)
 
-def get_item_by_barcode(bar_code:int):
+def get_item_by_bar_code(bar_code:int):
     try:
-        reference_table_item=ReferenceTable.objects.get(barCode=bar_code)
+        reference_table_item=reference_table.objects.get(bar_code=bar_code)
         stock_item=Stock.objects.get(id=reference_table_item.friendlyId)
         return stock_item
     except:
@@ -39,26 +38,35 @@ def get_item_by_barcode(bar_code:int):
 
 
 def add_new_item(bar_code_value, name_value):
-    reference_table_item=ReferenceTable.objects.create(barCode=bar_code_value, friendlyId=0)
+    #se busca en objeto en reference_table
     try:
-        #se busca si existe el nuevo objeto en Stock
-        stock_item=Stock.objects.get(name=name_value)
-    except Stock.DoesNotExist:
-        stock_item=None
-
-    if stock_item is not None:
-        #Si no existe se crea y se le da un fiendlyId de 0
-        friendly_id=stock_item.id
-        reference_table_item.friendlyId=friendly_id
-        reference_table_item.save()
-        response=f"Se añade un nuevo código de barras para {stock_item.name}"
+        reference_table_item=reference_table.objects.get(bar_code=bar_code_value)
+    except reference_table.DoesNotExist:
+        reference_table_item=None
+    #si existe se corta manda ese mensaje
+    if reference_table_item is not None:    
+        response="El código ya existe"
+        #si no existe se crea
     else:
-        #Si en stock existe un objeto con el mismo nombre se asocian, no se crea de nuevo
-        new_stock_item=Stock.objects.create(name=name_value, quantity=1)
-        reference_table_item.friendlyId = new_stock_item.id
-        reference_table_item.save()
 
-        response="Nuevo objeto en stock"
+        try:
+            #se busca si existe el nuevo objeto en Stock
+            stock_item=Stock.objects.get(name=name_value)
+        except Stock.DoesNotExist:
+            stock_item=None
+
+        if stock_item is not None:
+            #Si existe el item en stock se crea una entrada en RT apuntando a ese item
+            reference_table_new_item=reference_table.objects.create(bar_code=bar_code_value, friendlyId=stock_item.id)
+            reference_table_new_item.save()
+            response=f"Se añade un nuevo código de barras para {stock_item.name}"
+        else:
+            #Si no existe se crea
+            stock_new_item=Stock.objects.create(name=name_value, quantity=1)
+            stock_new_item.save()
+            reference_table_item=reference_table.objects.create(bar_code=bar_code_value, friendlyId=stock_new_item.id)
+
+            response="Nuevo objeto en stock"
     
     return response
     
